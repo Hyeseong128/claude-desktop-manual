@@ -339,23 +339,21 @@
     <p class="lead"><strong>1단계(Git 준비)</strong>만 윈도우/맥에 따라 다르고, 나머지 단계는 똑같아요. 내 컴퓨터에 맞는 1단계만 따라 하신 다음 이어서 진행하세요.</p>
 
     <h3 class="sub">2-1. 1단계 · 깃(Git) 준비하기</h3>
-    <div class="grid2">
-      <div class="card">
-        <span class="os-badge">윈도우(Windows)</span>
-        <p>깃(Git)은 클로드 코드가 작업 내용을 안전하게 저장하고 관리하는 데 필요한 프로그램이에요. 클로드 데스크탑을 쓰려면 먼저 설치해야 해요.</p>
-        <ol class="steps">
-          <li>아래 주소로 들어가서 깃(Git) 설치 파일을 내려받으세요.<br><a class="link" href="https://git-scm.com/downloads/win">https://git-scm.com/downloads/win</a></li>
-          <li>대부분의 컴퓨터는 <strong>'64-bit Git for Windows Setup'</strong>(X64 버전)을 받으면 돼요.</li>
-          <li>다운로드된 파일을 더블클릭해서 실행하세요.</li>
-          <li>설치 화면이 여러 번 나오는데, 특별히 바꿀 것 없이 <strong>계속 'Next(다음)' 버튼만 눌러서</strong> 끝까지 진행하시면 됩니다.</li>
-        </ol>
-        <figure class="shotimg"><img src="images/git-download.png" alt="Git 다운로드 페이지"><figcaption>Git 공식 다운로드 페이지 — 'Git for Windows/x64 Setup'을 클릭하세요</figcaption></figure>
-        <figure class="shotimg"><img src="images/git-installer.png" alt="Git 설치 마법사 첫 화면"><figcaption>설치 파일을 실행하면 나오는 첫 화면 — 'Next'를 누르면 돼요</figcaption></figure>
-      </div>
-      <div class="card">
-        <span class="os-badge">맥(Mac)</span>
-        <p>맥 컴퓨터에는 대부분 깃(Git)이 이미 설치되어 있어서 따로 설치하지 않아도 되는 경우가 많아요. 혹시 실행 중 깃이 없다는 안내가 나오면, 화면에 뜨는 설치 안내를 그대로 따라 설치해 주시면 돼요.</p>
-      </div>
+    <div class="card">
+      <span class="os-badge">윈도우(Windows)</span>
+      <p>깃(Git)은 클로드 코드가 작업 내용을 안전하게 저장하고 관리하는 데 필요한 프로그램이에요. 클로드 데스크탑을 쓰려면 먼저 설치해야 해요.</p>
+      <ol class="steps">
+        <li>아래 주소로 들어가서 깃(Git) 설치 파일을 내려받으세요.<br><a class="link" href="https://git-scm.com/downloads/win">https://git-scm.com/downloads/win</a></li>
+        <li>대부분의 컴퓨터는 <strong>'64-bit Git for Windows Setup'</strong>(X64 버전)을 받으면 돼요.</li>
+        <li>다운로드된 파일을 더블클릭해서 실행하세요.</li>
+        <li>설치 화면이 여러 번 나오는데, 특별히 바꿀 것 없이 <strong>계속 'Next(다음)' 버튼만 눌러서</strong> 끝까지 진행하시면 됩니다.</li>
+      </ol>
+      <figure class="shotimg"><img src="images/git-download.png" alt="Git 다운로드 페이지"><figcaption>Git 공식 다운로드 페이지 — 'Git for Windows/x64 Setup'을 클릭하세요</figcaption></figure>
+      <figure class="shotimg"><img src="images/git-installer.png" alt="Git 설치 마법사 첫 화면"><figcaption>설치 파일을 실행하면 나오는 첫 화면 — 'Next'를 누르면 돼요</figcaption></figure>
+    </div>
+    <div class="card">
+      <span class="os-badge">맥(Mac)</span>
+      <p>맥 컴퓨터에는 대부분 깃(Git)이 이미 설치되어 있어서 따로 설치하지 않아도 되는 경우가 많아요. 혹시 실행 중 깃이 없다는 안내가 나오면, 화면에 뜨는 설치 안내를 그대로 따라 설치해 주시면 돼요.</p>
     </div>
 
     <h3 class="sub">2-2. 2단계 · 클로드 데스크탑 설치하기</h3>
@@ -399,21 +397,28 @@
     <div class="card">
       <ol class="steps">
         <li>'Code' 메뉴로 들어가면 왼쪽 위에 <strong>'+ 새로 생성'</strong> 버튼이 보여요. 이 버튼을 누르면 새로운 작업을 시작할 수 있어요.</li>
-        <li>버튼을 누르면 어떤 작업을 할지 적는 화면과, 사용할 모델(클로드의 종류)을 고르는 화면이 나와요. 처음이라면 기본값을 그대로 두어도 괜찮아요.</li>
+        <li>클로드 코드가 작업할 <strong>작업 폴더</strong>를 골라야 해요. 최근에 쓴 폴더가 있다면 목록에서 고르고, 없다면 '폴더 열기...'를 선택하세요.</li>
+        <li>폴더 선택 창이 뜨면, 작업할 폴더를 새로 만들거나 기존 폴더를 선택한 뒤 <strong>'폴더 선택'</strong> 버튼을 누르세요. 폴더 이름은 <strong>띄어쓰기 없는 영어</strong>로 만드는 게 좋아요. (예: MyWorkFolder)</li>
+        <li>처음 사용하는 폴더라면 <strong>"이 워크스페이스를 신뢰하시겠습니까?"</strong> 창이 떠요. 클로드 코드가 이 폴더의 파일을 읽고 쓸 수 있도록 허락하는 절차예요. 내가 고른 폴더가 맞다면 <strong>'작업 공간 신뢰'</strong>를 누르세요.</li>
+        <li>이제 어떤 작업을 할지 적는 화면과, 사용할 모델(클로드의 종류)을 고르는 화면이 나와요. 처음이라면 기본값을 그대로 두어도 괜찮아요.</li>
       </ol>
+      <figure class="shotimg"><img src="images/folder-recent-dropdown.png" alt="최근 작업 폴더 선택 목록"><figcaption>최근에 사용한 작업 폴더 목록 — 없으면 '폴더 열기...'를 누르세요</figcaption></figure>
+      <figure class="shotimg"><img src="images/folder-picker.png" alt="작업 폴더 선택 창"><figcaption>폴더를 새로 만들거나 기존 폴더를 선택한 뒤 '폴더 선택'을 누르세요</figcaption></figure>
+      <figure class="shotimg"><img src="images/workspace-trust.png" alt="작업 공간 신뢰 확인 창"><figcaption>처음 여는 폴더는 신뢰 여부를 한 번 확인해요</figcaption></figure>
       <figure class="shotimg"><img src="images/app-code-tab.png" alt="Code 탭 화면"><figcaption>'Code' 메뉴 화면 — 왼쪽 위 '+ 새로 생성' 버튼으로 새 작업을 시작해요</figcaption></figure>
     </div>
 
     <h3 class="sub">4-2. 작업 권한 모드 이해하기</h3>
     <div class="card">
-      <p>화면 아래쪽에는 클로드가 작업할 때 얼마나 자유롭게 움직일지 정하는 버튼이 있어요.</p>
+      <p>화면 아래쪽 <strong>'자동'</strong> 버튼을 누르면, 클로드가 작업할 때 얼마나 자유롭게 움직일지 아래처럼 고를 수 있어요.</p>
       <div class="callout">
-        <span class="tag">기본 모드 (권장)</span>클로드가 무언가를 바꾸기 전에 사용자에게 먼저 확인을 받아요. 처음 사용하시는 분들은 이 모드를 사용하세요.
+        <span class="tag">자동 (기본, 권장)</span>클로드가 알아서 권한을 판단해서 처리해요. 처음 사용하시는 분들은 이 모드를 그대로 사용하세요.
       </div>
+      <p>그 밖에 <strong>수동</strong>(변경하기 전에 항상 확인), <strong>편집 자동 수락</strong>(모든 파일 편집을 자동으로 승인), <strong>계획</strong>(변경하기 전에 계획부터 만들기) 모드도 있어요. 필요할 때 바꿔서 써보세요.</p>
       <div class="callout warn">
-        <span class="tag">건너뛰기(Bypass) 모드</span>확인 없이 클로드가 바로바로 작업을 진행해요. 편리하지만 실수로 원치 않는 변경이 생길 수 있어 초보자에게는 추천하지 않아요.
+        <span class="tag">권한 무시</span>목록 맨 아래 '권한 무시'를 켜면 모든 확인을 건너뛰고 클로드가 바로바로 작업을 진행해요. 편리하지만 실수로 원치 않는 변경이 생길 수 있어 초보자에게는 추천하지 않아요.
       </div>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 화면 하단의 '편집 수락' 권한 설정 버튼과 모드 선택 목록]</span></div>
+      <figure class="shotimg"><img src="images/permission-modes.png" alt="작업 권한 모드 선택 목록"><figcaption>화면 하단 '자동' 버튼을 누르면 나오는 권한 모드 목록</figcaption></figure>
     </div>
 
     <h3 class="sub">4-3. 대화 보기 모드 고르기</h3>
