@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클로드 데스크탑 설치 및 기초 사용 매뉴얼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #2b2620;
+    --ink-soft: #58514a;
+    --accent: #d97b3f;
+    --accent-dark: #b85e29;
+    --accent-soft: #fdeee1;
+    --blue: #3b6ea5;
+    --blue-soft: #e8f1fa;
+    --warn: #c0392b;
+    --warn-soft: #fbeceb;
+    --border: #e7ded2;
+    --shadow: 0 4px 18px rgba(60, 45, 20, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: 'Noto Sans KR', -apple-system, 'Malgun Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 19px;
+    line-height: 1.8;
+  }
+
+  .wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  header.hero {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    padding: 56px 20px 44px;
+    text-align: center;
+  }
+
+  header.hero .eyebrow {
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    opacity: 0.9;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  header.hero h1 {
+    font-size: 34px;
+    font-weight: 900;
+    margin: 0 0 16px;
+    line-height: 1.4;
+  }
+
+  header.hero p {
+    font-size: 19px;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.96;
+    line-height: 1.8;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(250, 247, 242, 0.97);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+  }
+
+  nav.toc ol {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  nav.toc a {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  nav.toc a:hover { border-color: var(--accent); color: var(--accent-dark); }
+
+  section {
+    margin-top: 56px;
+  }
+
+  section > h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    padding-top: 24px;
+    border-top: 3px solid var(--accent);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  section > h2 .num {
+    color: var(--accent);
+    font-weight: 900;
+  }
+
+  section > .lead {
+    color: var(--ink-soft);
+    font-size: 18px;
+    margin-bottom: 28px;
+  }
+
+  h3.sub {
+    font-size: 21px;
+    font-weight: 700;
+    margin: 34px 0 16px;
+    color: var(--accent-dark);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 26px 26px 22px;
+    margin-bottom: 22px;
+    break-inside: avoid;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+  }
+
+  .steps > li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 46px;
+    margin-bottom: 18px;
+  }
+
+  .steps > li:last-child { margin-bottom: 0; }
+
+  .steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shot {
+    margin: 16px 0 4px 0;
+    border: 2px dashed #c9bfae;
+    background: #f4efe6;
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    color: #8a7f6c;
+    font-size: 16px;
+  }
+
+  .shot .cam { font-size: 30px; display: block; margin-bottom: 8px; }
+  .shot .cap { font-weight: 500; }
+
+  .callout {
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 18px 0;
+    font-size: 17px;
+    border-left: 6px solid var(--blue);
+    background: var(--blue-soft);
+  }
+
+  .callout.warn {
+    border-left-color: var(--warn);
+    background: var(--warn-soft);
+  }
+
+  .callout .tag {
+    display: inline-block;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  .callout.warn .tag { color: var(--warn); }
+  .callout:not(.warn) .tag { color: var(--blue); }
+
+  .example {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    font-size: 17px;
+    color: var(--ink-soft);
+  }
+
+  .example .label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--accent-dark);
+    margin-bottom: 6px;
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 680px) {
+    .grid2 { grid-template-columns: 1fr; }
+    header.hero h1 { font-size: 27px; }
+    body { font-size: 18px; }
+  }
+
+  .os-badge {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-top: 70px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  strong { color: var(--accent-dark); }
+
+  a.link { color: var(--blue); }
+
+  @media print {
+    nav.toc { display: none; }
+    header.hero { background: var(--accent-soft) !important; color: var(--ink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+    body { font-size: 14px; }
+    section { margin-top: 30px; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">사내 교육 자료</div>
+  <h1>클로드(Claude) 데스크탑<br>설치와 첫 사용법</h1>
+  <p>컴퓨터를 잘 몰라도 괜찮아요. 이 페이지를 순서대로 따라 하시면<br>클로드 데스크탑 설치부터 클로드 코드로 첫 작업을 맡기는 것까지 할 수 있어요.</p>
+</header>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#start">시작 전 확인</a></li>
+    <li><a href="#install">설치하기</a></li>
+    <li><a href="#screen">화면 둘러보기</a></li>
+    <li><a href="#usage">기초 사용법</a></li>
+    <li><a href="#end">마무리</a></li>
+  </ol>
+</nav>
+
+<div class="wrap">
+
+  <section id="start">
+    <h2><span class="num">1.</span> 시작하기 전에 확인할 것</h2>
+    <p class="lead">클로드 데스크탑 안에는 '챗', '코워크', '코드' 세 가지 메뉴가 있어요.</p>
+    <div class="card">
+      <p>이 중 <strong>'코드' 메뉴(클로드 코드)는 유료 요금제(Pro 이상)를 사용해야 켜져요.</strong> 무료 요금제라면 코드 메뉴가 보이지 않거나 눌리지 않을 수 있으니, 먼저 회사에서 안내받은 계정이 유료 요금제인지 확인해 주세요.</p>
+      <div class="shot">
+        <span class="cam">📸</span>
+        <span class="cap">[스크린샷: 클로드 데스크탑 좌측 메뉴에서 '챗 / 코워크 / 코드' 3개 탭이 보이는 전체 화면]</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2><span class="num">2.</span> 설치하기</h2>
+    <p class="lead">사용하시는 컴퓨터가 <strong>윈도우(Windows)</strong>인지 <strong>맥(Mac)</strong>인지에 따라 설치 순서가 조금 달라요. 내 컴퓨터에 맞는 부분만 따라 하시면 돼요.</p>
+
+    <h3 class="sub">2-1. 윈도우(Windows) 사용자</h3>
+    <div class="card">
+      <span class="os-badge">1단계 · 깃(Git) 설치하기</span>
+      <p>깃(Git)은 클로드 코드가 작업 내용을 안전하게 저장하고 관리하는 데 필요한 프로그램이에요. 클로드 데스크탑을 쓰려면 먼저 설치해야 해요.</p>
+      <ol class="steps">
+        <li>아래 주소로 들어가서 깃(Git) 설치 파일을 내려받으세요.<br><a class="link" href="https://git-scm.com/downloads/win">https://git-scm.com/downloads/win</a></li>
+        <li>대부분의 컴퓨터는 <strong>'64-bit Git for Windows Setup'</strong>(X64 버전)을 받으면 돼요.</li>
+        <li>다운로드된 파일을 더블클릭해서 실행하세요.</li>
+        <li>설치 화면이 여러 번 나오는데, 특별히 바꿀 것 없이 <strong>계속 'Next(다음)' 버튼만 눌러서</strong> 끝까지 진행하시면 됩니다.</li>
+      </ol>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 다운로드 페이지에서 64-bit 버전 다운로드 링크 위치]</span></div>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 설치 마법사 첫 화면과 'Next' 버튼]</span></div>
+    </div>
+
+    <div class="card">
+      <span class="os-badge">2단계 · 클로드 데스크탑 설치하기</span>
+      <ol class="steps">
+        <li>회사에서 안내받은 클로드 데스크탑 다운로드 주소로 들어가세요.</li>
+        <li>윈도우용 설치 파일을 내려받아 실행하세요.</li>
+        <li>화면에 나오는 안내에 따라 설치를 끝까지 진행하세요.</li>
+      </ol>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 윈도우 설치 화면]</span></div>
+    </div>
+
+    <h3 class="sub">2-2. 맥(Mac) 사용자</h3>
+    <div class="card">
+      <span class="os-badge">1단계 · 깃(Git) 확인하기</span>
+      <p>맥 컴퓨터에는 대부분 깃(Git)이 이미 설치되어 있어서 따로 설치하지 않아도 되는 경우가 많아요. 혹시 실행 중 깃이 없다는 안내가 나오면, 화면에 뜨는 설치 안내를 그대로 따라 설치해 주시면 돼요.</p>
+    </div>
+    <div class="card">
+      <span class="os-badge">2단계 · 클로드 데스크탑 설치하기</span>
+      <ol class="steps">
+        <li>회사에서 안내받은 클로드 데스크탑 다운로드 주소로 들어가세요.</li>
+        <li>맥(Mac)용 설치 파일을 내려받으세요.</li>
+        <li>내려받은 파일을 열어 안내에 따라 응용 프로그램 폴더로 옮겨 설치를 끝내세요.</li>
+      </ol>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 맥 설치 화면]</span></div>
+    </div>
+
+    <h3 class="sub">2-3. 로그인하기 (윈도우·맥 공통)</h3>
+    <div class="card">
+      <ol class="steps">
+        <li>설치가 끝나면 클로드 데스크탑을 실행하세요.</li>
+        <li>회사에서 안내받은 이메일과 비밀번호로 로그인하세요.</li>
+        <li>로그인이 완료되면 바로 사용할 준비가 끝난 거예요!</li>
+      </ol>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 로그인 화면]</span></div>
+    </div>
+  </section>
+
+  <section id="screen">
+    <h2><span class="num">3.</span> 첫 화면 둘러보기</h2>
+    <div class="card">
+      <p>로그인을 하면 왼쪽에 세 개의 메뉴가 보여요.</p>
+      <ul>
+        <li><strong>챗(Chat)</strong> — 클로드와 일반적인 대화를 나누는 곳이에요.</li>
+        <li><strong>코워크(Cowork)</strong> — 클로드와 함께 문서나 자료를 만드는 곳이에요.</li>
+        <li><strong>코드(Code)</strong> — 클로드가 직접 프로그램(코드)을 만들거나 수정해주는 곳이에요. 이 매뉴얼에서는 이 '코드' 메뉴를 사용하는 방법을 배울 거예요.</li>
+      </ul>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 좌측 메뉴 확대 화면, '코드' 탭에 마우스 커서가 올라가 있는 모습]</span></div>
+    </div>
+  </section>
+
+  <section id="usage">
+    <h2><span class="num">4.</span> 클로드 코드 기초 사용법</h2>
+
+    <h3 class="sub">4-1. 새 세션 시작하기</h3>
+    <div class="card">
+      <ol class="steps">
+        <li>'코드' 메뉴로 들어가면 <strong>'뉴 세션(New Session)'</strong> 버튼이 보여요. 이 버튼을 누르면 새로운 작업을 시작할 수 있어요.</li>
+        <li>버튼을 누르면 어떤 작업을 할지 적는 화면과, 사용할 모델(클로드의 종류)을 고르는 화면이 나와요. 처음이라면 기본값을 그대로 두어도 괜찮아요.</li>
+      </ol>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: '뉴 세션' 버튼 위치와 클릭 후 나타나는 화면]</span></div>
+    </div>
+
+    <h3 class="sub">4-2. 작업 권한 모드 이해하기</h3>
+    <div class="card">
+      <p>화면 아래쪽에는 클로드가 작업할 때 얼마나 자유롭게 움직일지 정하는 버튼이 있어요.</p>
+      <div class="callout">
+        <span class="tag">기본 모드 (권장)</span>클로드가 무언가를 바꾸기 전에 사용자에게 먼저 확인을 받아요. 처음 사용하시는 분들은 이 모드를 사용하세요.
+      </div>
+      <div class="callout warn">
+        <span class="tag">건너뛰기(Bypass) 모드</span>확인 없이 클로드가 바로바로 작업을 진행해요. 편리하지만 실수로 원치 않는 변경이 생길 수 있어 초보자에게는 추천하지 않아요.
+      </div>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 화면 하단의 '편집 수락' 권한 설정 버튼과 모드 선택 목록]</span></div>
+    </div>
+
+    <h3 class="sub">4-3. 대화 보기 모드 고르기</h3>
+    <div class="card">
+      <p>옆에 있는 버튼을 누르면 클로드가 작업하는 과정을 화면에 어떻게 보여줄지 고를 수 있어요. 처음에는 <strong>'요약 모드'</strong>를 선택하면 지금 어떤 작업이 진행되고 있는지 한눈에 파악하기 좋아요.</p>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 대화 보기 모드 선택 버튼(일반/요약/자세히 등) 목록]</span></div>
+    </div>
+
+    <h3 class="sub">4-4. 첫 작업 요청해보기</h3>
+    <div class="card">
+      <p>이제 실제로 클로드에게 일을 시켜볼 차례예요. 화면 아래 입력창에 하고 싶은 작업을 문장으로 적으면 돼요. 어렵게 생각하지 말고, 사람에게 부탁하듯이 적으면 돼요.</p>
+      <div class="example">
+        <span class="label">예시 입력</span>
+        "간단한 자기소개 페이지를 하나 만들어 주세요."
+      </div>
+      <p>입력 후 엔터를 누르면 클로드가 작업을 시작하고, 화면에 진행 상황이 나타나요.</p>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 입력창에 예시 문장을 입력한 화면과 작업이 진행되는 모습]</span></div>
+    </div>
+
+    <h3 class="sub">4-5. 미리보기(Preview)로 결과 확인하기</h3>
+    <div class="card">
+      <ol class="steps">
+        <li>클로드가 작업을 마치면 화면 오른쪽에 결과를 바로 확인할 수 있는 <strong>미리보기(Preview)</strong> 화면이 나타나요.</li>
+        <li>미리보기 안의 <strong>'시작(Start)'</strong> 버튼을 누르면 실제로 결과물이 어떻게 동작하는지 볼 수 있어요.</li>
+        <li>마음에 안 드는 부분이 있으면, 미리보기 화면에서 그 부분을 클릭해서 선택한 다음 "이 부분을 노란색으로 바꿔주세요" 처럼 요청하면 그 부분만 콕 집어서 수정해줘요.</li>
+      </ol>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 미리보기 화면과 'Start' 버튼]</span></div>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 미리보기에서 특정 요소를 클릭해 선택한 모습]</span></div>
+    </div>
+  </section>
+
+  <section id="end">
+    <h2><span class="num">5.</span> 마무리</h2>
+    <div class="card">
+      <p>여기까지 따라 하셨다면 클로드 데스크탑 설치부터 클로드 코드로 첫 작업을 맡기는 것까지 모두 해보신 거예요. 사용하다가 막히는 부분이 있으면 사내 담당자에게 편하게 문의해 주세요.</p>
+    </div>
+  </section>
+
+  <footer>
+    사내 교육용 자료 · 클로드 데스크탑 설치 &amp; 기초 사용 매뉴얼
+  </footer>
+
+</div>
+</body>
+</html>
