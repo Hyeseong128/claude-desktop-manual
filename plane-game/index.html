@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>장애물 돌파 비행기</title>
+<style>
+  :root {
+    --bg: #05070f;
+    --panel: #0d1220;
+    --accent: #38bdf8;
+    --accent2: #f87171;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: radial-gradient(ellipse at center, #101828 0%, #05070f 70%);
+    color: var(--text);
+    font-family: "Malgun Gothic", "Segoe UI", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-shadow: 0 0 12px rgba(56,189,248,0.5);
+  }
+  #stage-wrap {
+    position: relative;
+    width: min(92vw, 480px);
+    aspect-ratio: 480 / 720;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(56,189,248,0.35), 0 20px 60px rgba(0,0,0,0.6);
+    background: #000;
+    touch-action: none;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  #hint {
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 480px;
+  }
+  kbd {
+    background: var(--panel);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>✈ 장애물 돌파 비행기</h1>
+  <div id="stage-wrap">
+    <canvas id="game" width="480" height="720"></canvas>
+  </div>
+  <div id="hint">
+    이동: <kbd>방향키</kbd> / <kbd>WASD</kbd> &nbsp;·&nbsp; 미사일 발사: <kbd>Space</kbd> &nbsp;·&nbsp; 일시정지: <kbd>P</kbd><br>
+    모바일에서는 화면을 드래그하여 이동, 터치하면 자동 발사됩니다.
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const CW = 480, CH = 720;
+
+  // ---- High-DPI setup ----
+  function setupDPR() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = CW * dpr;
+    canvas.height = CH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  setupDPR();
+  window.addEventListener("resize", setupDPR);
+
+  // ---- Constants ----
+  const TOTAL_STAGES = 10;
+  const STAGE_DURATION = 60; // seconds
+  const MAX_LIVES = 5;
+  const INVINCIBLE_MS = 1400;
+  const MISSILE_COOLDOWN = 170; // ms
+  const MISSILE_SPEED = 520; // px/s
+  const PLAYER_SPEED = 300; // px/s
+
+  const OBSTACLE_TYPES = [
+    { key: "tiny",   label: "매우작음", radius: 12, hp: 1, speedMin: 220, speedMax: 270, score: 5,  color: "#7dd3fc", core: "#0ea5e9" },
+    { key: "small",  label: "작음",     radius: 18, hp: 1, speedMin: 170, speedMax: 215, score: 10, color: "#38bdf8", core: "#0284c7" },
+    { key: "medium", label: "중간",     radius: 27, hp: 2, speedMin: 120, speedMax: 155, score: 20, color: "#facc15", core: "#ca8a04" },
+    { key: "large",  label: "큼",       radius: 38, hp: 3, speedMin: 82,  speedMax: 108, score: 35, color: "#fb923c", core: "#c2410c" },
+    { key: "huge",   label: "매우큼",   radius: 52, hp: 5, speedMin: 50,  speedMax: 68,  score: 60, color: "#f87171", core: "#b91c1c" },
+  ];
+
+  function pickObstacleType(stage) {
+    const weights = OBSTACLE_TYPES.map((t, i) => {
+      const base = 6 - i * 1.1;
+      const stageBonus = i * (stage - 1) * 0.55;
+      return Math.max(0.6, base + stageBonus);
+    });
+    const total = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < OBSTACLE_TYPES.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return OBSTACLE_TYPES[i];
+    }
+    return OBSTACLE_TYPES[0];
+  }
+
+  function stageMaxConcurrent(stage) {
+    return Math.min(4 + Math.ceil(stage / 2), 10);
+  }
+  function stageSpawnInterval(stage) {
+    return Math.max(1050 - stage * 70, 380);
+  }
+
+  // ---- State ----
+  let state = "start"; // start | playing | stageclear | gameover | victory | paused
+  let stage = 1;
+  let score = 0;
+  let lives = MAX_LIVES;
+  let timeLeft = STAGE_DURATION;
+  let spawnTimer = 0;
+  let stageClearTimer = 0;
+  let lastTime = 0;
+
+  const player = { x: CW / 2, y: CH - 100, radius: 16, invincibleUntil: 0 };
+  let missiles = [];
+  let obstacles = [];
+  let particles = [];
+  let stars = [];
+
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 90; i++) {
+      stars.push({
+        x: Math.random() * CW,
+        y: Math.random() * CH,
+        r: Math.random() * 1.6 + 0.4,
+        speed: Math.random() * 60 + 30,
+        a: Math.random() * 0.6 + 0.3,
+      });
+    }
+  }
+  initStars();
+
+  const keys = new Set();
+  let fireHeld = false;
+  let lastFireAt = 0;
+  let touchTarget = null;
+
+  window.addEventListener("keydown", (e) => {
+    const code = e.code;
+    if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(code)) e.preventDefault();
+    keys.add(code);
+    if (code === "Space") {
+      fireHeld = true;
+      if (state === "start") startGame();
+      else if (state === "gameover" || state === "victory") resetGame();
+    }
+    if (code === "KeyP") togglePause();
+  });
+  window.addEventListener("keyup", (e) => {
+    keys.delete(e.code);
+    if (e.code === "Space") fireHeld = false;
+  });
+
+  function canvasPoint(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: ((clientX - rect.left) / rect.width) * CW,
+      y: ((clientY - rect.top) / rect.height) * CH,
+    };
+  }
+  const wrap = document.getElementById("stage-wrap");
+  wrap.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    touchTarget = canvasPoint(t.clientX, t.clientY);
+    fireHeld = true;
+    if (state === "start") startGame();
+    else if (state === "gameover" || state === "victory") resetGame();
+  }, { passive: false });
+  wrap.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    touchTarget = canvasPoint(t.clientX, t.clientY);
+  }, { passive: false });
+  wrap.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    touchTarget = null;
+    fireHeld = false;
+  }, { passive: false });
+
+  function togglePause() {
+    if (state === "playing") state = "paused";
+    else if (state === "paused") state = "playing";
+  }
+
+  function startGame() {
+    stage = 1; score = 0; lives = MAX_LIVES;
+    resetStage();
+    state = "playing";
+  }
+  function resetGame() { startGame(); }
+
+  function resetStage() {
+    timeLeft = STAGE_DURATION;
+    spawnTimer = 0;
+    obstacles = [];
+    missiles = [];
+    particles = [];
+    player.x = CW / 2;
+    player.y = CH - 100;
+    player.invincibleUntil = performance.now() + 1000;
+  }
+
+  function nextStage() {
+    stage++;
+    if (stage > TOTAL_STAGES) {
+      state = "victory";
+      return;
+    }
+    resetStage();
+    state = "playing";
+  }
+
+  // ---- Spawning ----
+  function spawnObstacle() {
+    const type = pickObstacleType(stage);
+    const r = type.radius;
+    const x = r + Math.random() * (CW - r * 2);
+    const speed = type.speedMin + Math.random() * (type.speedMax - type.speedMin);
+    const drift = (Math.random() - 0.5) * 40;
+    obstacles.push({
+      x, y: -r - 10, r,
+      vy: speed, vx: drift,
+      hp: type.hp, maxHp: type.hp,
+      type,
+      wobble: Math.random() * Math.PI * 2,
+    });
+  }
+
+  function fireMissile() {
+    missiles.push({ x: player.x, y: player.y - player.radius - 4, r: 4, vy: -MISSILE_SPEED });
+  }
+
+  function spawnParticles(x, y, color, count) {
+    for (let i = 0; i < count; i++) {
+      const ang = Math.random() * Math.PI * 2;
+      const spd = 40 + Math.random() * 140;
+      particles.push({
+        x, y,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd,
+        life: 0.4 + Math.random() * 0.3,
+        age: 0,
+        color,
+        r: 2 + Math.random() * 3,
+      });
+    }
+  }
+
+  // ---- Update ----
+  function update(dt, now) {
+    // stars always drift
+    for (const s of stars) {
+      s.y += s.speed * dt;
+      if (s.y > CH) { s.y = 0; s.x = Math.random() * CW; }
+    }
+
+    if (state !== "playing") return;
+
+    // timer
+    timeLeft -= dt;
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      state = "stageclear";
+      stageClearTimer = 1.6;
+      return;
+    }
+
+    // player movement
+    let dx = 0, dy = 0;
+    if (keys.has("ArrowLeft") || keys.has("KeyA")) dx -= 1;
+    if (keys.has("ArrowRight") || keys.has("KeyD")) dx += 1;
+    if (keys.has("ArrowUp") || keys.has("KeyW")) dy -= 1;
+    if (keys.has("ArrowDown") || keys.has("KeyS")) dy += 1;
+
+    if (touchTarget) {
+      const tdx = touchTarget.x - player.x;
+      const tdy = touchTarget.y - player.y;
+      const dist = Math.hypot(tdx, tdy);
+      if (dist > 4) {
+        player.x += (tdx / dist) * PLAYER_SPEED * dt;
+        player.y += (tdy / dist) * PLAYER_SPEED * dt;
+      }
+    } else if (dx !== 0 || dy !== 0) {
+      const len = Math.hypot(dx, dy) || 1;
+      player.x += (dx / len) * PLAYER_SPEED * dt;
+      player.y += (dy / len) * PLAYER_SPEED * dt;
+    }
+
+    const minY = CH * 0.45;
+    player.x = Math.max(player.radius, Math.min(CW - player.radius, player.x));
+    player.y = Math.max(minY, Math.min(CH - player.radius - 6, player.y));
+
+    // firing
+    if (fireHeld && now - lastFireAt >= MISSILE_COOLDOWN) {
+      fireMissile();
+      lastFireAt = now;
+    }
+
+    // spawn obstacles
+    spawnTimer -= dt * 1000;
+    const maxConcurrent = stageMaxConcurrent(stage);
+    if (spawnTimer <= 0 && obstacles.length < maxConcurrent) {
+      spawnObstacle();
+      spawnTimer = stageSpawnInterval(stage);
+    }
+
+    // update missiles
+    for (const m of missiles) m.y += m.vy * dt;
+    missiles = missiles.filter((m) => m.y > -20);
+
+    // update obstacles
+    for (const o of obstacles) {
+      o.y += o.vy * dt;
+      o.wobble += dt * 2;
+      o.x += Math.sin(o.wobble) * o.vx * dt;
+      o.x = Math.max(o.r, Math.min(CW - o.r, o.x));
+    }
+    obstacles = obstacles.filter((o) => o.y - o.r < CH + 20);
+
+    // missile vs obstacle
+    for (const o of obstacles) {
+      if (o._dead) continue;
+      for (const m of missiles) {
+        if (m._dead) continue;
+        const dist = Math.hypot(o.x - m.x, o.y - m.y);
+        if (dist < o.r + m.r) {
+          m._dead = true;
+          o.hp -= 1;
+          spawnParticles(m.x, m.y, o.type.color, 4);
+          if (o.hp <= 0) {
+            o._dead = true;
+            score += o.type.score;
+            spawnParticles(o.x, o.y, o.type.color, 16);
+          }
+          break;
+        }
+      }
+    }
+    missiles = missiles.filter((m) => !m._dead);
+    obstacles = obstacles.filter((o) => !o._dead);
+
+    // player vs obstacle
+    if (now > player.invincibleUntil) {
+      for (const o of obstacles) {
+        const dist = Math.hypot(o.x - player.x, o.y - player.y);
+        if (dist < o.r + player.radius * 0.8) {
+          o._dead = true;
+          lives -= 1;
+          spawnParticles(player.x, player.y, "#f87171", 20);
+          player.invincibleUntil = now + INVINCIBLE_MS;
+          if (lives <= 0) {
+            lives = 0;
+            state = "gameover";
+          }
+          break;
+        }
+      }
+      obstacles = obstacles.filter((o) => !o._dead);
+    }
+
+    // particles
+    for (const p of particles) {
+      p.age += dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vx *= 0.94; p.vy *= 0.94;
+    }
+    particles = particles.filter((p) => p.age < p.life);
+  }
+
+  // ---- Draw ----
+  function drawStars() {
+    ctx.save();
+    for (const s of stars) {
+      ctx.globalAlpha = s.a;
+      ctx.fillStyle = "#cbd5e1";
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawPlayer(now) {
+    const blinking = now < player.invincibleUntil && Math.floor(now / 100) % 2 === 0;
+    if (blinking) return;
+    ctx.save();
+    ctx.translate(player.x, player.y);
+    ctx.shadowColor = "#38bdf8";
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    ctx.moveTo(0, -20);
+    ctx.lineTo(14, 16);
+    ctx.lineTo(6, 10);
+    ctx.lineTo(0, 16);
+    ctx.lineTo(-6, 10);
+    ctx.lineTo(-14, 16);
+    ctx.closePath();
+    ctx.fillStyle = "#e2e8f0";
+    ctx.fill();
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath();
+    ctx.moveTo(0, -20);
+    ctx.lineTo(6, 4);
+    ctx.lineTo(-6, 4);
+    ctx.closePath();
+    ctx.fill();
+    // flame
+    ctx.fillStyle = "rgba(250,204,21,0.85)";
+    ctx.beginPath();
+    ctx.moveTo(-4, 14);
+    ctx.lineTo(0, 14 + 8 + Math.random() * 6);
+    ctx.lineTo(4, 14);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMissiles() {
+    ctx.save();
+    ctx.fillStyle = "#fde047";
+    ctx.shadowColor = "#fde047";
+    ctx.shadowBlur = 8;
+    for (const m of missiles) {
+      ctx.beginPath();
+      ctx.ellipse(m.x, m.y, 2.5, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawObstacles() {
+    ctx.save();
+    for (const o of obstacles) {
+      ctx.beginPath();
+      ctx.fillStyle = o.type.color;
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = o.type.core;
+      ctx.arc(o.x, o.y, o.r * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+      if (o.maxHp > 1) {
+        const barW = o.r * 1.6;
+        const pct = o.hp / o.maxHp;
+        ctx.fillStyle = "rgba(0,0,0,0.4)";
+        ctx.fillRect(o.x - barW / 2, o.y - o.r - 10, barW, 4);
+        ctx.fillStyle = "#4ade80";
+        ctx.fillRect(o.x - barW / 2, o.y - o.r - 10, barW * pct, 4);
+      }
+    }
+    ctx.restore();
+  }
+
+  function drawParticles() {
+    ctx.save();
+    for (const p of particles) {
+      ctx.globalAlpha = Math.max(0, 1 - p.age / p.life);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawHeart(x, y, size, filled) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.beginPath();
+    const top = size * 0.3;
+    ctx.moveTo(0, top);
+    ctx.bezierCurveTo(-size / 2, -top / 1.2, -size, size / 3, 0, size);
+    ctx.bezierCurveTo(size, size / 3, size / 2, -top / 1.2, 0, top);
+    ctx.closePath();
+    if (filled) {
+      ctx.fillStyle = "#f87171";
+      ctx.fill();
+    } else {
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawHUD() {
+    ctx.save();
+    ctx.textBaseline = "top";
+    ctx.font = "bold 16px 'Segoe UI', sans-serif";
+    ctx.fillStyle = "#e5e7eb";
+    ctx.fillText(`스테이지 ${stage} / ${TOTAL_STAGES}`, 12, 10);
+
+    ctx.textAlign = "right";
+    ctx.fillText(`점수 ${score}`, CW - 12, 10);
+    ctx.textAlign = "left";
+
+    // timer bar
+    const barW = CW - 24;
+    const pct = Math.max(0, timeLeft / STAGE_DURATION);
+    ctx.fillStyle = "rgba(255,255,255,0.15)";
+    ctx.fillRect(12, 34, barW, 7);
+    ctx.fillStyle = pct < 0.25 ? "#f87171" : "#38bdf8";
+    ctx.fillRect(12, 34, barW * pct, 7);
+
+    ctx.font = "12px sans-serif";
+    ctx.fillStyle = "#94a3b8";
+    ctx.fillText(`남은 시간 ${Math.ceil(timeLeft)}초`, 12, 48);
+
+    // lives
+    const heartSize = 8;
+    const heartGap = 20;
+    let hx = CW - 12 - heartSize;
+    for (let i = MAX_LIVES - 1; i >= 0; i--) {
+      drawHeart(hx, 52, heartSize, i < lives);
+      hx -= heartGap;
+    }
+    ctx.restore();
+  }
+
+  function drawCenterPanel(lines) {
+    ctx.save();
+    ctx.fillStyle = "rgba(5,7,15,0.78)";
+    ctx.fillRect(0, 0, CW, CH);
+    ctx.textAlign = "center";
+    let y = CH / 2 - (lines.length - 1) * 20;
+    for (const line of lines) {
+      ctx.font = line.font || "16px sans-serif";
+      ctx.fillStyle = line.color || "#e5e7eb";
+      ctx.fillText(line.text, CW / 2, y);
+      y += line.gap || 34;
+    }
+    ctx.restore();
+  }
+
+  function render(now) {
+    ctx.clearRect(0, 0, CW, CH);
+    ctx.fillStyle = "#05070f";
+    ctx.fillRect(0, 0, CW, CH);
+    drawStars();
+
+    if (state === "start") {
+      drawCenterPanel([
+        { text: "✈ 장애물 돌파 비행기", font: "bold 26px sans-serif", color: "#38bdf8", gap: 46 },
+        { text: "장애물 5단계 · 총 10 스테이지", font: "14px sans-serif", color: "#94a3b8", gap: 30 },
+        { text: "스테이지마다 60초 생존 · 5회 피격 시 게임 오버", font: "13px sans-serif", color: "#94a3b8", gap: 44 },
+        { text: "Space 또는 화면 터치로 시작", font: "bold 16px sans-serif", color: "#facc15", gap: 30 },
+      ]);
+      return;
+    }
+
+    // playing / paused / stageclear / gameover / victory all render the field
+    drawObstacles();
+    drawMissiles();
+    drawPlayer(now);
+    drawParticles();
+    drawHUD();
+
+    if (state === "paused") {
+      drawCenterPanel([
+        { text: "일시정지", font: "bold 24px sans-serif", color: "#facc15", gap: 34 },
+        { text: "P 키를 눌러 계속하기", font: "14px sans-serif", color: "#94a3b8" },
+      ]);
+    } else if (state === "stageclear") {
+      drawCenterPanel([
+        { text: `스테이지 ${stage} 클리어!`, font: "bold 24px sans-serif", color: "#4ade80", gap: 34 },
+        { text: `점수 ${score}`, font: "16px sans-serif", color: "#e5e7eb" },
+      ]);
+    } else if (state === "gameover") {
+      drawCenterPanel([
+        { text: "게임 오버", font: "bold 28px sans-serif", color: "#f87171", gap: 40 },
+        { text: `도달 스테이지 ${stage} / ${TOTAL_STAGES}`, font: "15px sans-serif", color: "#e5e7eb", gap: 26 },
+        { text: `최종 점수 ${score}`, font: "15px sans-serif", color: "#e5e7eb", gap: 40 },
+        { text: "Space 또는 화면 터치로 다시 시작", font: "bold 14px sans-serif", color: "#facc15" },
+      ]);
+    } else if (state === "victory") {
+      drawCenterPanel([
+        { text: "🏆 게임 클리어!", font: "bold 26px sans-serif", color: "#facc15", gap: 40 },
+        { text: "10 스테이지를 모두 돌파했습니다", font: "14px sans-serif", color: "#e5e7eb", gap: 26 },
+        { text: `최종 점수 ${score}`, font: "16px sans-serif", color: "#4ade80", gap: 40 },
+        { text: "Space 또는 화면 터치로 다시 시작", font: "bold 14px sans-serif", color: "#94a3b8" },
+      ]);
+    }
+  }
+
+  // ---- Main loop ----
+  function loop(now) {
+    if (!lastTime) lastTime = now;
+    let dt = (now - lastTime) / 1000;
+    dt = Math.min(dt, 0.05);
+    lastTime = now;
+
+    if (state === "stageclear") {
+      stageClearTimer -= dt;
+      if (stageClearTimer <= 0) nextStage();
+    }
+
+    update(dt, now);
+    render(now);
+    requestAnimationFrame(loop);
+  }
+
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

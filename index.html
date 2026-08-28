@@ -296,6 +296,19 @@
 
   a.link { color: var(--blue); }
 
+  .playbtn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 17px;
+    text-decoration: none;
+    box-shadow: var(--shadow);
+  }
+  .playbtn:hover { background: var(--accent-dark); }
+
   @media print {
     nav.toc { display: none; }
     header.hero { background: var(--accent-soft) !important; color: var(--ink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -370,11 +383,9 @@
     <div class="card">
       <ol class="steps">
         <li>설치가 끝나면 클로드 데스크탑을 실행하세요. 아래와 같은 시작 화면이 나오면 <strong>'시작하기'</strong> 버튼을 누르세요.</li>
-        <li>안내에 따라 회사에서 사용하는 계정으로 로그인하세요.</li>
-        <li>로그인이 완료되면 바로 사용할 준비가 끝난 거예요!</li>
+        <li>안내에 따라 로그인하면 바로 사용할 준비가 끝나요!</li>
       </ol>
       <figure class="shotimg"><img src="images/claude-first-launch.png" alt="Claude 첫 실행 화면"><figcaption>설치 후 처음 실행하면 나오는 시작 화면 — '시작하기'를 누르세요</figcaption></figure>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 로그인 입력 화면]</span></div>
     </div>
   </section>
 
@@ -425,13 +436,7 @@
       <figure class="shotimg"><img src="images/permission-modes.png" alt="작업 권한 모드 선택 목록"><figcaption>화면 하단 '자동' 버튼을 누르면 나오는 권한 모드 목록</figcaption></figure>
     </div>
 
-    <h3 class="sub">4-3. 대화 보기 모드 고르기</h3>
-    <div class="card">
-      <p>옆에 있는 버튼을 누르면 클로드가 작업하는 과정을 화면에 어떻게 보여줄지 고를 수 있어요. 처음에는 <strong>'요약 모드'</strong>를 선택하면 지금 어떤 작업이 진행되고 있는지 한눈에 파악하기 좋아요.</p>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 대화 보기 모드 선택 버튼(일반/요약/자세히 등) 목록]</span></div>
-    </div>
-
-    <h3 class="sub">4-4. 첫 작업 요청해보기</h3>
+    <h3 class="sub">4-3. 첫 작업 요청해보기</h3>
     <div class="card">
       <p>이제 실제로 클로드에게 일을 시켜볼 차례예요. 화면 아래 입력창에 하고 싶은 작업을 문장으로 적으면 돼요. 어렵게 생각하지 말고, 사람에게 부탁하듯이 적으면 돼요.</p>
       <div class="example">
@@ -440,20 +445,16 @@
       </div>
       <p>입력 후 엔터를 누르면 클로드가 작업을 시작하고, 화면에 진행 상황이 나타나요.</p>
       <figure class="shotimg"><img src="images/example-run.png" alt="요청을 입력하고 작업이 진행되는 모습"><figcaption>요청을 입력하면 클로드가 바로 작업을 시작해요</figcaption></figure>
-    </div>
-
-    <h3 class="sub">4-5. 미리보기(Preview)로 결과 확인하기</h3>
-    <div class="card">
-      <ol class="steps">
-        <li>클로드가 작업을 마치면 채팅 안에 결과물을 요약해서 보여주는 카드가 나타나요.</li>
-        <li>카드의 <strong>'열기'</strong> 버튼을 누르면 오른쪽에 <strong>미리보기(Preview)</strong> 화면이 뜨면서 실제로 결과물이 어떻게 동작하는지 바로 볼 수 있어요.</li>
-        <li>마음에 안 드는 부분이 있으면, 미리보기 화면에서 그 부분을 클릭해서 선택한 다음 "이 부분을 노란색으로 바꿔주세요" 처럼 요청하면 그 부분만 콕 집어서 수정해줘요.</li>
-      </ol>
-      <figure class="shotimg"><img src="images/preview-complete.png" alt="완성된 결과물과 미리보기 화면"><figcaption>완성 카드의 '열기' 버튼을 누르면 오른쪽에 미리보기 화면이 떠요</figcaption></figure>
+      <p>작업이 끝나면 채팅 안에 결과물을 요약해서 보여주는 카드가 자동으로 나타나고, 오른쪽에는 <strong>미리보기(Preview)</strong> 화면도 바로 함께 떠요. 따로 '시작' 버튼을 누를 필요 없이 결과물이 어떻게 동작하는지 바로 볼 수 있어요.</p>
+      <figure class="shotimg"><img src="images/preview-complete.png" alt="완성된 결과물과 미리보기 화면"><figcaption>작업이 끝나면 결과 카드와 미리보기 화면이 자동으로 함께 떠요</figcaption></figure>
+      <p>마음에 안 드는 부분이 있으면, 미리보기 화면에서 그 부분을 클릭해서 선택한 다음 "이 부분을 노란색으로 바꿔주세요" 처럼 요청하면 그 부분만 콕 집어서 수정해줘요.</p>
       <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 미리보기에서 특정 요소를 클릭해 선택한 모습]</span></div>
+      <p style="text-align:center; margin-top:22px;">
+        <a class="playbtn" href="plane-game/" target="_blank" rel="noopener">🎮 클로드가 만든 예시 결과물 직접 플레이해보기</a>
+      </p>
     </div>
 
-    <h3 class="sub">4-6. 사용량 확인하기</h3>
+    <h3 class="sub">4-4. 사용량 확인하기</h3>
     <div class="card">
       <p>화면 오른쪽 아래에 있는 동그라미 아이콘을 누르면 지금까지 얼마나 사용했는지 확인할 수 있어요.</p>
       <ul>
