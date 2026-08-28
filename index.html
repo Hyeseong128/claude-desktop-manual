@@ -322,52 +322,43 @@
 
   <section id="install">
     <h2><span class="num">2.</span> 설치하기</h2>
-    <p class="lead">사용하시는 컴퓨터가 <strong>윈도우(Windows)</strong>인지 <strong>맥(Mac)</strong>인지에 따라 설치 순서가 조금 달라요. 내 컴퓨터에 맞는 부분만 따라 하시면 돼요.</p>
+    <p class="lead"><strong>1단계(Git 준비)</strong>만 윈도우/맥에 따라 다르고, 나머지 단계는 똑같아요. 내 컴퓨터에 맞는 1단계만 따라 하신 다음 이어서 진행하세요.</p>
 
-    <h3 class="sub">2-1. 윈도우(Windows) 사용자</h3>
+    <h3 class="sub">2-1. 1단계 · 깃(Git) 준비하기</h3>
+    <div class="grid2">
+      <div class="card">
+        <span class="os-badge">윈도우(Windows)</span>
+        <p>깃(Git)은 클로드 코드가 작업 내용을 안전하게 저장하고 관리하는 데 필요한 프로그램이에요. 클로드 데스크탑을 쓰려면 먼저 설치해야 해요.</p>
+        <ol class="steps">
+          <li>아래 주소로 들어가서 깃(Git) 설치 파일을 내려받으세요.<br><a class="link" href="https://git-scm.com/downloads/win">https://git-scm.com/downloads/win</a></li>
+          <li>대부분의 컴퓨터는 <strong>'64-bit Git for Windows Setup'</strong>(X64 버전)을 받으면 돼요.</li>
+          <li>다운로드된 파일을 더블클릭해서 실행하세요.</li>
+          <li>설치 화면이 여러 번 나오는데, 특별히 바꿀 것 없이 <strong>계속 'Next(다음)' 버튼만 눌러서</strong> 끝까지 진행하시면 됩니다.</li>
+        </ol>
+        <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 다운로드 페이지에서 64-bit 버전 다운로드 링크 위치]</span></div>
+        <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 설치 마법사 첫 화면과 'Next' 버튼]</span></div>
+      </div>
+      <div class="card">
+        <span class="os-badge">맥(Mac)</span>
+        <p>맥 컴퓨터에는 대부분 깃(Git)이 이미 설치되어 있어서 따로 설치하지 않아도 되는 경우가 많아요. 혹시 실행 중 깃이 없다는 안내가 나오면, 화면에 뜨는 설치 안내를 그대로 따라 설치해 주시면 돼요.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">2-2. 2단계 · 클로드 데스크탑 설치하기</h3>
     <div class="card">
-      <span class="os-badge">1단계 · 깃(Git) 설치하기</span>
-      <p>깃(Git)은 클로드 코드가 작업 내용을 안전하게 저장하고 관리하는 데 필요한 프로그램이에요. 클로드 데스크탑을 쓰려면 먼저 설치해야 해요.</p>
       <ol class="steps">
-        <li>아래 주소로 들어가서 깃(Git) 설치 파일을 내려받으세요.<br><a class="link" href="https://git-scm.com/downloads/win">https://git-scm.com/downloads/win</a></li>
-        <li>대부분의 컴퓨터는 <strong>'64-bit Git for Windows Setup'</strong>(X64 버전)을 받으면 돼요.</li>
-        <li>다운로드된 파일을 더블클릭해서 실행하세요.</li>
-        <li>설치 화면이 여러 번 나오는데, 특별히 바꿀 것 없이 <strong>계속 'Next(다음)' 버튼만 눌러서</strong> 끝까지 진행하시면 됩니다.</li>
+        <li>클로드 데스크탑 다운로드 주소(<a class="link" href="https://claude.com/ko/download">https://claude.com/ko/download</a>)로 들어가세요.</li>
+        <li>내 컴퓨터에 맞는 설치 파일(윈도우용 또는 맥용)을 내려받아 실행하세요.</li>
+        <li>화면에 나오는 안내에 따라 설치를 끝까지 진행하세요. (맥은 응용 프로그램 폴더로 옮기면 완료돼요.)</li>
       </ol>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 다운로드 페이지에서 64-bit 버전 다운로드 링크 위치]</span></div>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 설치 마법사 첫 화면과 'Next' 버튼]</span></div>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 설치 화면]</span></div>
     </div>
 
-    <div class="card">
-      <span class="os-badge">2단계 · 클로드 데스크탑 설치하기</span>
-      <ol class="steps">
-        <li>회사에서 안내받은 클로드 데스크탑 다운로드 주소로 들어가세요.</li>
-        <li>윈도우용 설치 파일을 내려받아 실행하세요.</li>
-        <li>화면에 나오는 안내에 따라 설치를 끝까지 진행하세요.</li>
-      </ol>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 윈도우 설치 화면]</span></div>
-    </div>
-
-    <h3 class="sub">2-2. 맥(Mac) 사용자</h3>
-    <div class="card">
-      <span class="os-badge">1단계 · 깃(Git) 확인하기</span>
-      <p>맥 컴퓨터에는 대부분 깃(Git)이 이미 설치되어 있어서 따로 설치하지 않아도 되는 경우가 많아요. 혹시 실행 중 깃이 없다는 안내가 나오면, 화면에 뜨는 설치 안내를 그대로 따라 설치해 주시면 돼요.</p>
-    </div>
-    <div class="card">
-      <span class="os-badge">2단계 · 클로드 데스크탑 설치하기</span>
-      <ol class="steps">
-        <li>회사에서 안내받은 클로드 데스크탑 다운로드 주소로 들어가세요.</li>
-        <li>맥(Mac)용 설치 파일을 내려받으세요.</li>
-        <li>내려받은 파일을 열어 안내에 따라 응용 프로그램 폴더로 옮겨 설치를 끝내세요.</li>
-      </ol>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 맥 설치 화면]</span></div>
-    </div>
-
-    <h3 class="sub">2-3. 로그인하기 (윈도우·맥 공통)</h3>
+    <h3 class="sub">2-3. 3단계 · 로그인하기</h3>
     <div class="card">
       <ol class="steps">
         <li>설치가 끝나면 클로드 데스크탑을 실행하세요.</li>
-        <li>회사에서 안내받은 이메일과 비밀번호로 로그인하세요.</li>
+        <li>클로드 데스크탑 다운로드 주소(<a class="link" href="https://claude.com/ko/download">https://claude.com/ko/download</a>)에서 안내받은 이메일과 비밀번호로 로그인하세요.</li>
         <li>로그인이 완료되면 바로 사용할 준비가 끝난 거예요!</li>
       </ol>
       <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 로그인 화면]</span></div>
