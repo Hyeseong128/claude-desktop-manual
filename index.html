@@ -296,21 +296,22 @@
 
   a.link { color: var(--blue); }
 
-  .playbtn {
-    display: inline-block;
-    padding: 14px 28px;
-    border-radius: 999px;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 17px;
-    text-decoration: none;
+  .demo-frame {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .demo-frame iframe {
+    width: min(100%, 520px);
+    height: 880px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
     box-shadow: var(--shadow);
   }
-  .playbtn:hover { background: var(--accent-dark); }
 
   @media print {
     nav.toc { display: none; }
+    #demo { display: none; }
     header.hero { background: var(--accent-soft) !important; color: var(--ink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .card { box-shadow: none; border: 1px solid #ccc; }
     body { font-size: 14px; }
@@ -408,19 +409,31 @@
     <div class="card">
       <ol class="steps">
         <li>'Code' 메뉴로 들어가면 왼쪽 위에 <strong>'+ 새로 생성'</strong> 버튼이 보여요. 이 버튼을 누르면 새로운 작업을 시작할 수 있어요.</li>
-        <li>클로드 코드가 작업할 <strong>작업 폴더</strong>를 골라야 해요. 최근에 쓴 폴더가 있다면 목록에서 고르고, 없다면 '폴더 열기...'를 선택하세요.</li>
-        <li>폴더 선택 창이 뜨면, 작업할 폴더를 새로 만들거나 기존 폴더를 선택한 뒤 <strong>'폴더 선택'</strong> 버튼을 누르세요. 폴더 이름은 <strong>띄어쓰기 없는 영어</strong>로 만드는 게 좋아요. (예: MyWorkFolder)</li>
-        <li>처음 사용하는 폴더라면 <strong>"이 워크스페이스를 신뢰하시겠습니까?"</strong> 창이 떠요. 클로드 코드가 이 폴더의 파일을 읽고 쓸 수 있도록 허락하는 절차예요. 내가 고른 폴더가 맞다면 <strong>'작업 공간 신뢰'</strong>를 누르세요.</li>
-        <li>이제 어떤 작업을 할지 적는 화면과, 사용할 모델(클로드의 종류)을 고르는 화면이 나와요. 처음이라면 기본값을 그대로 두어도 괜찮아요.</li>
+        <li>
+          클로드 코드가 작업할 <strong>작업 폴더</strong>를 골라야 해요. 최근에 쓴 폴더가 있다면 목록에서 고르고, 없다면 '폴더 열기...'를 선택하세요.
+          <figure class="shotimg"><img src="images/folder-recent-dropdown.png" alt="최근 작업 폴더 선택 목록"><figcaption>최근에 사용한 작업 폴더 목록 — 없으면 '폴더 열기...'를 누르세요</figcaption></figure>
+        </li>
+        <li>
+          폴더 선택 창이 뜨면, 작업할 폴더를 새로 만들거나 기존 폴더를 선택한 뒤 <strong>'폴더 선택'</strong> 버튼을 누르세요. 폴더 이름은 <strong>띄어쓰기 없는 영어</strong>로 만드는 게 좋아요. (예: MyWorkFolder)
+          <figure class="shotimg"><img src="images/folder-picker.png" alt="작업 폴더 선택 창"><figcaption>폴더를 새로 만들거나 기존 폴더를 선택한 뒤 '폴더 선택'을 누르세요</figcaption></figure>
+        </li>
+        <li>
+          처음 사용하는 폴더라면 <strong>"이 워크스페이스를 신뢰하시겠습니까?"</strong> 창이 떠요. 클로드 코드가 이 폴더의 파일을 읽고 쓸 수 있도록 허락하는 절차예요. 내가 고른 폴더가 맞다면 <strong>'작업 공간 신뢰'</strong>를 누르세요.
+          <figure class="shotimg"><img src="images/workspace-trust.png" alt="작업 공간 신뢰 확인 창"><figcaption>처음 여는 폴더는 신뢰 여부를 한 번 확인해요</figcaption></figure>
+        </li>
+        <li>
+          이제 어떤 작업을 할지 적는 화면과, 사용할 모델(클로드의 종류)을 고르는 화면이 나와요. 처음이라면 기본값을 그대로 두어도 괜찮아요.
+          <figure class="shotimg"><img src="images/app-code-tab.png" alt="Code 탭 화면"><figcaption>'Code' 메뉴 화면 — 왼쪽 위 '+ 새로 생성' 버튼으로 새 작업을 시작해요</figcaption></figure>
+        </li>
+        <li>
+          <strong>모델</strong>은 클로드의 종류예요. <strong>일상적인 작업은 'Sonnet 5'면 충분해요.</strong> 기본값 그대로 두고 시작해도 괜찮아요.
+          <figure class="shotimg"><img src="images/model-select.png" alt="모델 선택 목록"><figcaption>모델 선택 목록 — 일상적인 작업은 Sonnet 5면 충분해요</figcaption></figure>
+        </li>
+        <li>
+          <strong>노력</strong>은 '더 빠르게'와 '더 스마트하게' 사이에서 정하는 설정이에요. 어렵게 생각하지 말고 기본값 그대로 두어도 돼요.
+          <figure class="shotimg"><img src="images/effort-slider.png" alt="노력 설정 슬라이더"><figcaption>'노력' 설정 — 더 빠르게 ↔ 더 스마트하게</figcaption></figure>
+        </li>
       </ol>
-      <figure class="shotimg"><img src="images/folder-recent-dropdown.png" alt="최근 작업 폴더 선택 목록"><figcaption>최근에 사용한 작업 폴더 목록 — 없으면 '폴더 열기...'를 누르세요</figcaption></figure>
-      <figure class="shotimg"><img src="images/folder-picker.png" alt="작업 폴더 선택 창"><figcaption>폴더를 새로 만들거나 기존 폴더를 선택한 뒤 '폴더 선택'을 누르세요</figcaption></figure>
-      <figure class="shotimg"><img src="images/workspace-trust.png" alt="작업 공간 신뢰 확인 창"><figcaption>처음 여는 폴더는 신뢰 여부를 한 번 확인해요</figcaption></figure>
-      <figure class="shotimg"><img src="images/app-code-tab.png" alt="Code 탭 화면"><figcaption>'Code' 메뉴 화면 — 왼쪽 위 '+ 새로 생성' 버튼으로 새 작업을 시작해요</figcaption></figure>
-      <p><strong>모델</strong>은 클로드의 종류예요. <strong>일상적인 작업은 'Sonnet 5'면 충분해요.</strong> 기본값 그대로 두고 시작해도 괜찮아요.</p>
-      <figure class="shotimg"><img src="images/model-select.png" alt="모델 선택 목록"><figcaption>모델 선택 목록 — 일상적인 작업은 Sonnet 5면 충분해요</figcaption></figure>
-      <p><strong>노력</strong>은 '더 빠르게'와 '더 스마트하게' 사이에서 정하는 설정이에요. 어렵게 생각하지 말고 기본값 그대로 두어도 돼요.</p>
-      <figure class="shotimg"><img src="images/effort-slider.png" alt="노력 설정 슬라이더"><figcaption>'노력' 설정 — 더 빠르게 ↔ 더 스마트하게</figcaption></figure>
     </div>
 
     <h3 class="sub">4-2. 작업 권한 모드 이해하기</h3>
@@ -455,11 +468,29 @@
       <figure class="shotimg"><img src="images/example-run.png" alt="요청을 입력하고 작업이 진행되는 모습"><figcaption>요청을 입력하면 클로드가 바로 작업을 시작해요</figcaption></figure>
       <p>작업이 끝나면 채팅 안에 결과물을 요약해서 보여주는 카드가 자동으로 나타나고, 오른쪽에는 <strong>미리보기(Preview)</strong> 화면도 바로 함께 떠요. 따로 '시작' 버튼을 누를 필요 없이 결과물이 어떻게 동작하는지 바로 볼 수 있어요.</p>
       <figure class="shotimg"><img src="images/preview-complete.png" alt="완성된 결과물과 미리보기 화면"><figcaption>작업이 끝나면 결과 카드와 미리보기 화면이 자동으로 함께 떠요</figcaption></figure>
-      <p>마음에 안 드는 부분이 있으면, 미리보기 화면에서 그 부분을 클릭해서 선택한 다음 "이 부분을 노란색으로 바꿔주세요" 처럼 요청하면 그 부분만 콕 집어서 수정해줘요.</p>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 미리보기에서 특정 요소를 클릭해 선택한 모습]</span></div>
-      <p style="text-align:center; margin-top:22px;">
-        <a class="playbtn" href="plane-game/" target="_blank" rel="noopener">🎮 클로드가 만든 예시 결과물 직접 플레이해보기</a>
-      </p>
+      <p>마음에 안 드는 부분이 있으면, 미리보기에서 직접 그 부분을 콕 집어 수정 요청을 할 수 있어요.</p>
+      <ol class="steps">
+        <li>
+          미리보기 오른쪽 위의 <strong>'요소 선택'</strong> 버튼을 누르세요.
+          <figure class="shotimg"><img src="images/preview-select-mode.png" alt="요소 선택 버튼"><figcaption>미리보기 오른쪽 위 '요소 선택' 버튼을 눌러요</figcaption></figure>
+        </li>
+        <li>
+          고치고 싶은 부분에 마우스를 올리면 어떤 요소인지 표시돼요. 그 부분을 클릭해서 선택하세요.
+          <figure class="shotimg"><img src="images/preview-pick-element.png" alt="고치고 싶은 요소 선택하기"><figcaption>고치고 싶은 부분에 마우스를 올리고 클릭해서 선택해요</figcaption></figure>
+        </li>
+        <li>
+          입력창에 선택한 요소가 태그로 붙어요. 어떻게 고치고 싶은지 적어서 요청하세요.
+          <div class="example">
+            <span class="label">예시 입력</span>
+            "게임 오버라는 말은 너무 부정적인 거 같아. 다음에도 잘 할 수 있다고 응원해주는 문구로 바꿔줘."
+          </div>
+          <figure class="shotimg"><img src="images/preview-request-edit.png" alt="선택한 요소에 수정 요청하기"><figcaption>선택한 요소 태그와 함께 원하는 수정 내용을 적어요</figcaption></figure>
+        </li>
+        <li>
+          요청한 대로 수정된 결과를 미리보기에서 바로 확인할 수 있어요.
+          <figure class="shotimg"><img src="images/preview-edit-result.png" alt="수정 요청 결과 확인"><figcaption>"게임 오버" → "다음엔 더 잘할 수 있어요!"로 바로 반영돼요</figcaption></figure>
+        </li>
+      </ol>
     </div>
 
     <h3 class="sub">4-4. 사용량 확인하기</h3>
@@ -479,6 +510,13 @@
     <h2><span class="num">5.</span> 마무리</h2>
     <div class="card">
       <p>여기까지 따라 하셨다면 클로드 데스크탑 설치부터 클로드 코드로 첫 작업을 맡기는 것까지 모두 해보신 거예요. 사용하다가 막히는 부분이 있으면 사내 담당자에게 편하게 문의해 주세요.</p>
+    </div>
+  </section>
+
+  <section id="demo">
+    <p class="lead" style="text-align:center;">🎮 위 예시로 클로드가 실제로 만든 결과물이에요. 아래에서 바로 플레이해보세요.</p>
+    <div class="demo-frame">
+      <iframe src="plane-game/index.html" title="클로드가 만든 예시 게임" loading="lazy"></iframe>
     </div>
   </section>
 
