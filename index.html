@@ -199,6 +199,24 @@
   .shot .cam { font-size: 30px; display: block; margin-bottom: 8px; }
   .shot .cap { font-weight: 500; }
 
+  .shotimg {
+    margin: 16px 0 4px 0;
+    break-inside: avoid;
+  }
+  .shotimg img {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .shotimg figcaption {
+    margin-top: 8px;
+    font-size: 15px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
   .callout {
     border-radius: 12px;
     padding: 18px 20px;
@@ -310,13 +328,9 @@
 
   <section id="start">
     <h2><span class="num">1.</span> 시작하기 전에 확인할 것</h2>
-    <p class="lead">클로드 데스크탑 안에는 '챗', '코워크', '코드' 세 가지 메뉴가 있어요.</p>
+    <p class="lead">클로드 데스크탑 안에는 <strong>'채팅 및 Cowork'</strong>와 <strong>'Code'</strong> 두 가지 메뉴가 있어요.</p>
     <div class="card">
-      <p>이 중 <strong>'코드' 메뉴(클로드 코드)는 유료 요금제(Pro 이상)를 사용해야 켜져요.</strong> 무료 요금제라면 코드 메뉴가 보이지 않거나 눌리지 않을 수 있으니, 먼저 회사에서 안내받은 계정이 유료 요금제인지 확인해 주세요.</p>
-      <div class="shot">
-        <span class="cam">📸</span>
-        <span class="cap">[스크린샷: 클로드 데스크탑 좌측 메뉴에서 '챗 / 코워크 / 코드' 3개 탭이 보이는 전체 화면]</span>
-      </div>
+      <p>이 중 <strong>'Code' 메뉴(클로드 코드)는 유료 요금제(Pro 이상)를 사용해야 켜져요.</strong> 무료 요금제라면 Code 메뉴가 보이지 않거나 눌리지 않을 수 있으니, 먼저 회사에서 안내받은 계정이 유료 요금제인지 확인해 주세요.</p>
     </div>
   </section>
 
@@ -335,8 +349,8 @@
           <li>다운로드된 파일을 더블클릭해서 실행하세요.</li>
           <li>설치 화면이 여러 번 나오는데, 특별히 바꿀 것 없이 <strong>계속 'Next(다음)' 버튼만 눌러서</strong> 끝까지 진행하시면 됩니다.</li>
         </ol>
-        <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 다운로드 페이지에서 64-bit 버전 다운로드 링크 위치]</span></div>
-        <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: Git 설치 마법사 첫 화면과 'Next' 버튼]</span></div>
+        <figure class="shotimg"><img src="images/git-download.png" alt="Git 다운로드 페이지"><figcaption>Git 공식 다운로드 페이지 — 'Git for Windows/x64 Setup'을 클릭하세요</figcaption></figure>
+        <figure class="shotimg"><img src="images/git-installer.png" alt="Git 설치 마법사 첫 화면"><figcaption>설치 파일을 실행하면 나오는 첫 화면 — 'Next'를 누르면 돼요</figcaption></figure>
       </div>
       <div class="card">
         <span class="os-badge">맥(Mac)</span>
@@ -351,30 +365,30 @@
         <li>내 컴퓨터에 맞는 설치 파일(윈도우용 또는 맥용)을 내려받아 실행하세요.</li>
         <li>화면에 나오는 안내에 따라 설치를 끝까지 진행하세요. (맥은 응용 프로그램 폴더로 옮기면 완료돼요.)</li>
       </ol>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 설치 화면]</span></div>
+      <figure class="shotimg"><img src="images/claude-download-page.png" alt="Claude 다운로드 페이지"><figcaption>Claude 공식 다운로드 페이지 — '데스크톱' 항목에서 내 컴퓨터에 맞는 다운로드를 클릭하세요</figcaption></figure>
     </div>
 
     <h3 class="sub">2-3. 3단계 · 로그인하기</h3>
     <div class="card">
       <ol class="steps">
-        <li>설치가 끝나면 클로드 데스크탑을 실행하세요.</li>
-        <li>클로드 데스크탑 다운로드 주소(<a class="link" href="https://claude.com/ko/download">https://claude.com/ko/download</a>)에서 안내받은 이메일과 비밀번호로 로그인하세요.</li>
+        <li>설치가 끝나면 클로드 데스크탑을 실행하세요. 아래와 같은 시작 화면이 나오면 <strong>'시작하기'</strong> 버튼을 누르세요.</li>
+        <li>안내에 따라 회사에서 사용하는 계정으로 로그인하세요.</li>
         <li>로그인이 완료되면 바로 사용할 준비가 끝난 거예요!</li>
       </ol>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 클로드 데스크탑 로그인 화면]</span></div>
+      <figure class="shotimg"><img src="images/claude-first-launch.png" alt="Claude 첫 실행 화면"><figcaption>설치 후 처음 실행하면 나오는 시작 화면 — '시작하기'를 누르세요</figcaption></figure>
+      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 로그인 입력 화면]</span></div>
     </div>
   </section>
 
   <section id="screen">
     <h2><span class="num">3.</span> 첫 화면 둘러보기</h2>
     <div class="card">
-      <p>로그인을 하면 왼쪽에 세 개의 메뉴가 보여요.</p>
+      <p>로그인을 하면 왼쪽 위에 두 개의 메뉴가 보여요.</p>
       <ul>
-        <li><strong>챗(Chat)</strong> — 클로드와 일반적인 대화를 나누는 곳이에요.</li>
-        <li><strong>코워크(Cowork)</strong> — 클로드와 함께 문서나 자료를 만드는 곳이에요.</li>
-        <li><strong>코드(Code)</strong> — 클로드가 직접 프로그램(코드)을 만들거나 수정해주는 곳이에요. 이 매뉴얼에서는 이 '코드' 메뉴를 사용하는 방법을 배울 거예요.</li>
+        <li><strong>채팅 및 Cowork</strong> — 클로드와 대화를 나누거나, 함께 문서·자료를 만드는 곳이에요. 입력창 근처의 '채팅' / 'Cowork' 버튼으로 둘을 전환할 수 있어요.</li>
+        <li><strong>Code</strong> — 클로드가 직접 프로그램(코드)을 만들거나 수정해주는 곳이에요. 이 매뉴얼에서는 이 'Code' 메뉴를 사용하는 방법을 배울 거예요.</li>
       </ul>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: 좌측 메뉴 확대 화면, '코드' 탭에 마우스 커서가 올라가 있는 모습]</span></div>
+      <figure class="shotimg"><img src="images/app-chat-cowork.png" alt="로그인 후 첫 화면"><figcaption>로그인하면 보이는 첫 화면 — 왼쪽 위 '채팅 및 Cowork' / 'Code' 탭</figcaption></figure>
     </div>
   </section>
 
@@ -384,10 +398,10 @@
     <h3 class="sub">4-1. 새 세션 시작하기</h3>
     <div class="card">
       <ol class="steps">
-        <li>'코드' 메뉴로 들어가면 <strong>'뉴 세션(New Session)'</strong> 버튼이 보여요. 이 버튼을 누르면 새로운 작업을 시작할 수 있어요.</li>
+        <li>'Code' 메뉴로 들어가면 왼쪽 위에 <strong>'+ 새로 생성'</strong> 버튼이 보여요. 이 버튼을 누르면 새로운 작업을 시작할 수 있어요.</li>
         <li>버튼을 누르면 어떤 작업을 할지 적는 화면과, 사용할 모델(클로드의 종류)을 고르는 화면이 나와요. 처음이라면 기본값을 그대로 두어도 괜찮아요.</li>
       </ol>
-      <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷: '뉴 세션' 버튼 위치와 클릭 후 나타나는 화면]</span></div>
+      <figure class="shotimg"><img src="images/app-code-tab.png" alt="Code 탭 화면"><figcaption>'Code' 메뉴 화면 — 왼쪽 위 '+ 새로 생성' 버튼으로 새 작업을 시작해요</figcaption></figure>
     </div>
 
     <h3 class="sub">4-2. 작업 권한 모드 이해하기</h3>
